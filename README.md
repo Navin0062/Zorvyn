@@ -447,20 +447,6 @@ PORT=3000                    # Server port
 JWT_SECRET=your-secret-key   # JWT signing secret
 ```
 
-## 🚧 Potential Enhancements
-
-- [ ] Refresh token mechanism
-- [ ] Password reset functionality
-- [ ] Email verification
-- [x] **Rate limiting** ✅ - Implemented with tiered limits
-- [ ] API versioning
-- [ ] Export data to CSV/Excel
-- [ ] Advanced filtering and search
-- [ ] Real-time updates with WebSockets
-- [ ] File attachments for records
-- [ ] Multi-currency support
-- [ ] Budget tracking
-- [ ] Recurring transactions
 
 ## 📊 API Testing Examples
 
