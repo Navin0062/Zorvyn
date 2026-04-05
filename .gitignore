@@ -1,0 +1,64 @@
+# Dependencies
+node_modules/
+
+# Database files
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.test
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.cache
+
+# Build output
+dist/
+build/
+
+# Test files (optional - keep if you want tests in repo)
+# tests/__snapshots__/
+
+# Documentation (optional - keep internal docs private)
+ASSIGNMENT_EXPLAINED.md
+CHECKLIST.md
+SUMMARY.md
+

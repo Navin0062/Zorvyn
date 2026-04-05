@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zorvyn Finance API Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .base-url {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+
+        .base-url span {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        nav {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        nav h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        nav ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+        }
+
+        nav a {
+            color: #333;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: block;
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .section {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .method {
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+            color: white;
+        }
+
+        .method.get { background: #61affe; }
+        .method.post { background: #49cc90; }
+        .method.put { background: #fca130; }
+        .method.delete { background: #f93e3e; }
+        .method.patch { background: #a0a0a0; }
+
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .endpoint-description {
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .auth-badge {
+            background: #ff9800;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .auth-badge.optional {
+            background: #4caf50;
+        }
+
+        h4 {
+            margin: 15px 0 10px 0;
+            color: #555;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        .param-table th,
+        .param-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .param-table th {
+            background: #667eea;
+            color: white;
+        }
+
+        .param-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .required {
+            color: #f93e3e;
+            font-weight: bold;
+        }
+
+        .optional {
+            color: #999;
+            font-style: italic;
+        }
+
+        .role-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .role-table th,
+        .role-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .role-table th {
+            background: #667eea;
+            color: white;
+        }
+
+        .role-table td:first-child {
+            text-align: left;
+        }
+
+        .check { color: #4caf50; font-size: 1.2em; }
+        .cross { color: #f93e3e; font-size: 1.2em; }
+
+        .response-example {
+            margin: 15px 0;
+        }
+
+        .response-example h5 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #5568d3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .endpoint-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav ul {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚀 Zorvyn Finance API</h1>
+            <p>Finance Data Processing and Access Control Backend</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="base-url">
+            Base URL: <span id="baseUrl">http://localhost:3000/api</span>
+            <button class="copy-btn" onclick="copyBaseUrl()">Copy</button>
+        </div>
+
+        <nav>
+            <h3>Quick Navigation</h3>
+            <ul>
+                <li><a href="#authentication">Authentication</a></li>
+                <li><a href="#users">User Management</a></li>
+                <li><a href="#records">Financial Records</a></li>
+                <li><a href="#dashboard">Dashboard Summary</a></li>
+                <li><a href="#access-control">Access Control</a></li>
+                <li><a href="#errors">Error Handling</a></li>
+            </ul>
+        </nav>
+
+        <section id="authentication" class="section">
+            <h2>🔐 Authentication</h2>
+            <p>All authenticated endpoints require a JWT token in the Authorization header:</p>
+            <pre><code>Authorization: Bearer &lt;your-jwt-token&gt;</code></pre>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/auth/register</span>
+                </div>
+                <p class="endpoint-description">Register a new user account</p>
+                
+                <h4>Request Body</h4>
+                <table class="param-table">
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>email</code></td>
+                        <td>string</td>
+                        <td class="required">Yes</td>
+                        <td>Valid email address (must be unique)</td>
+                    </tr>
+                    <tr>
+                        <td><code>password</code></td>
+                        <td>string</td>
+                        <td class="required">Yes</td>
+                        <td>Minimum 6 characters</td>
+                    </tr>
+                    <tr>
+                        <td><code>name</code></td>
+                        <td>string</td>
+                        <td class="required">Yes</td>
+                        <td>User's full name</td>
+                    </tr>
+                    <tr>
+                        <td><code>role</code></td>
+                        <td>string</td>
+                        <td class="optional">No</td>
+                        <td>viewer, analyst, or admin (default: viewer)</td>
+                    </tr>
+                </table>
+
+                <div class="response-example">
+                    <h5>Example Request</h5>
+                    <pre><code>POST /api/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "password123",
+  "name": "John Doe",
+  "role": "viewer"
+}</code></pre>
+                </div>
+
+                <div class="response-example">
+                    <h5>Example Response (201 Created)</h5>
+                    <pre><code>{
+  "message": "User registered successfully",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "role": "viewer",
+    "is_active": true,
+    "created_at": "2026-04-05T10:00:00Z"
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/auth/login</span>
+                </div>
+                <p class="endpoint-description">Authenticate user and receive JWT token</p>
+                
+                <h4>Request Body</h4>
+                <table class="param-table">
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>email</code></td>
+                        <td>string</td>
+                        <td class="required">Yes</td>
+                        <td>Registered email address</td>
+                    </tr>
+                    <tr>
+                        <td><code>password</code></td>
+                        <td>string</td>
+                        <td class="required">Yes</td>
+                        <td>User's password</td>
+                    </tr>
+                </table>
+
+                <div class="response-example">
+                    <h5>Example Request</h5>
+                    <pre><code>POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@zorvyn.com",
+  "password": "admin123"
+}</code></pre>
+                </div>
+
+                <div class="response-example">
+                    <h5>Example Response (200 OK)</h5>
+                    <pre><code>{
+  "message": "Login successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "uuid",
+    "email": "admin@zorvyn.com",
+    "name": "Admin User",
+    "role": "admin",
+    "is_active": true
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/auth/profile</span>
+                    <span class="auth-badge">🔒 Auth Required</span>
+                </div>
+                <p class="endpoint-description">Get authenticated user's profile</p>
+                
+                <div class="response-example">
+                    <h5>Example Response (200 OK)</h5>
+                    <pre><code>{
+  "user": {
+    "id": "uuid",
+    "email": "admin@zorvyn.com",
+    "name": "Admin User",
+    "role": "admin",
+    "is_active": true,
+    "created_at": "2026-04-05T10:00:00Z"
+  }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="users" class="section">
+            <h2>👥 User Management</h2>
+            <p>Manage system users. Most operations require admin privileges.</p>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/users</span>
+                    <span class="auth-badge">🔒 Auth Required</span>
+                </div>
+                <p class="endpoint-description">List all users with pagination</p>
+                
+                <h4>Query Parameters</h4>
+                <table class="param-table">
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>page</code></td>
+                        <td>integer</td>
+                        <td class="optional">No</td>
+                        <td>Page number (default: 1)</td>
+                    </tr>
+                    <tr>
+                        <td><code>limit</code></td>
+                        <td>integer</td>
+                        <td class="optional">No</td>
+                        <td>Items per page (default: 10)</td>
+                    </tr>
+                    <tr>
+                        <td><code>search</code></td>
+                        <td>string</td>
+                        <td class="optional">No</td>
+                        <td>Search by name or email</td>
+                    </tr>
+                </table>
+
+                <div class="response-example">
+                    <h5>Example Response (200 OK)</h5>
+                    <pre><code>{
+  "message": "Users retrieved successfully",
+  "data": [
+    {
+      "id": "uuid",
+      "email": "admin@zorvyn.com",
+      "name": "Admin User",
+      "role": "admin",
+      "is_active": true,
+      "created_at": "2026-04-05T10:00:00Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 3,
+    "totalPages": 1
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/users</span>
+                    <span class="auth-badge">👑 Admin Only</span>
+                </div>
+                <p class="endpoint-description">Create a new user</p>
+                
+                <h4>Request Body</h4>
+                <table class="param-table">
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>email</code></td>
+                        <td>string</td>
+                        <td class="required">Yes</td>
+                        <td>Valid email address</td>
+                    </tr>
+                    <tr>
+                        <td><code>password</code></td>
+                        <td>string</td>
+                        <td class="required">Yes</td>
+                        <td>Minimum 6 characters</td>
+                    </tr>
+                    <tr>
+                        <td><code>name</code></td>
+                        <td>string</td>
+                        <td class="required">Yes</td>
+                        <td>User's full name</td>
+                    </tr>
+                    <tr>
+                        <td><code>role</code></td>
+                        <td>string</td>
+                        <td class="optional">No</td>
+                        <td>viewer, analyst, or admin</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method put">PUT</span>
+                    <span class="endpoint-path">/api/users/:id</span>
+                    <span class="auth-badge">👑 Admin Only</span>
+                </div>
+                <p class="endpoint-description">Update user details</p>
+                
+                <h4>Request Body (all optional)</h4>
+                <table class="param-table">
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>name</code></td>
+                        <td>string</td>
+                        <td>Updated name</td>
+                    </tr>
+                    <tr>
+                        <td><code>role</code></td>
+                        <td>string</td>
+                        <td>viewer, analyst, or admin</td>
+                    </tr>
+                    <tr>
+                        <td><code>is_active</code></td>
+                        <td>boolean</td>
+                        <td>Active status</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method delete">DELETE</span>
+                    <span class="endpoint-path">/api/users/:id</span>
+                    <span class="auth-badge">👑 Admin Only</span>
+                </div>
+                <p class="endpoint-description">Delete a user</p>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method patch">PATCH</span>
+                    <span class="endpoint-path">/api/users/:id/toggle-status</span>
+                    <span class="auth-badge">👑 Admin Only</span>
+                </div>
+                <p class="endpoint-description">Toggle user active/inactive status</p>
+            </div>
+        </section>
+
+        <section id="records" class="section">
+            <h2>💰 Financial Records</h2>
+            <p>Manage financial transactions and entries.</p>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/records</span>
+                    <span class="auth-badge">🔒 Analyst+</span>
+                </div>
+                <p class="endpoint-description">List financial records with filtering</p>
+                
+                <h4>Query Parameters</h4>
+                <table class="param-table">
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>page</code></td>
+                        <td>integer</td>
+                        <td class="optional">No</td>
+                        <td>Page number (default: 1)</td>
+                    </tr>
+                    <tr>
+                        <td><code>limit</code></td>
+                        <td>integer</td>
+                        <td class="optional">No</td>
+                        <td>Items per page (default: 10)</td>
+                    </tr>
+                    <tr>
+                        <td><code>type</code></td>
+                        <td>string</td>
+                        <td class="optional">No</td>
+                        <td>income or expense</td>
+                    </tr>
+                    <tr>
+                        <td><code>category</code></td>
+                        <td>string</td>
+                        <td class="optional">No</td>
+                        <td>Filter by category</td>
+                    </tr>
+                    <tr>
+                        <td><code>startDate</code></td>
+                        <td>string</td>
+                        <td class="optional">No</td>
+                        <td>Start date (YYYY-MM-DD)</td>
+                    </tr>
+                    <tr>
+                        <td><code>endDate</code></td>
+                        <td>string</td>
+                        <td class="optional">No</td>
+                        <td>End date (YYYY-MM-DD)</td>
+                    </tr>
+                    <tr>
+                        <td><code>search</code></td>
+                        <td>string</td>
+                        <td class="optional">No</td>
+                        <td>Search description or category</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/records</span>
+                    <span class="auth-badge">🔒 Analyst+</span>
+                </div>
+                <p class="endpoint-description">Create a new financial record</p>
+                
+                <h4>Request Body</h4>
+                <table class="param-table">
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>amount</code></td>
+                        <td>number</td>
+                        <td class="required">Yes</td>
+                        <td>Positive number</td>
+                    </tr>
+                    <tr>
+                        <td><code>type</code></td>
+                        <td>string</td>
+                        <td class="required">Yes</td>
+                        <td>income or expense</td>
+                    </tr>
+                    <tr>
+                        <td><code>category</code></td>
+                        <td>string</td>
+                        <td class="required">Yes</td>
+                        <td>Category name</td>
+                    </tr>
+                    <tr>
+                        <td><code>date</code></td>
+                        <td>string</td>
+                        <td class="required">Yes</td>
+                        <td>Date in YYYY-MM-DD format</td>
+                    </tr>
+                    <tr>
+                        <td><code>description</code></td>
+                        <td>string</td>
+                        <td class="optional">No</td>
+                        <td>Notes or description</td>
+                    </tr>
+                </table>
+
+                <div class="response-example">
+                    <h5>Example Request</h5>
+                    <pre><code>POST /api/records
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json
+
+{
+  "amount": 1500.50,
+  "type": "income",
+  "category": "Salary",
+  "date": "2026-04-05",
+  "description": "Monthly salary payment"
+}</code></pre>
+                </div>
+
+                <div class="response-example">
+                    <h5>Example Response (201 Created)</h5>
+                    <pre><code>{
+  "message": "Financial record created successfully",
+  "record": {
+    "id": "uuid",
+    "amount": 1500.50,
+    "type": "income",
+    "category": "Salary",
+    "date": "2026-04-05",
+    "description": "Monthly salary payment",
+    "user_id": "uuid",
+    "created_at": "2026-04-05T10:00:00Z"
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/records/:id</span>
+                    <span class="auth-badge">🔒 Analyst+</span>
+                </div>
+                <p class="endpoint-description">Get a specific financial record</p>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method put">PUT</span>
+                    <span class="endpoint-path">/api/records/:id</span>
+                    <span class="auth-badge">👑 Admin Only</span>
+                </div>
+                <p class="endpoint-description">Update a financial record</p>
+                
+                <h4>Request Body (all optional)</h4>
+                <table class="param-table">
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><code>amount</code></td>
+                        <td>number</td>
+                        <td>Updated amount</td>
+                    </tr>
+                    <tr>
+                        <td><code>type</code></td>
+                        <td>string</td>
+                        <td>income or expense</td>
+                    </tr>
+                    <tr>
+                        <td><code>category</code></td>
+                        <td>string</td>
+                        <td>Updated category</td>
+                    </tr>
+                    <tr>
+                        <td><code>date</code></td>
+                        <td>string</td>
+                        <td>Updated date</td>
+                    </tr>
+                    <tr>
+                        <td><code>description</code></td>
+                        <td>string</td>
+                        <td>Updated description</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method delete">DELETE</span>
+                    <span class="endpoint-path">/api/records/:id</span>
+                    <span class="auth-badge">👑 Admin Only</span>
+                </div>
+                <p class="endpoint-description">Delete a financial record (soft delete)</p>
+            </div>
+        </section>
+
+        <section id="dashboard" class="section">
+            <h2>📊 Dashboard Summary</h2>
+            
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-path">/api/records/dashboard/summary</span>
+                    <span class="auth-badge optional">🔒 Auth Required</span>
+                </div>
+                <p class="endpoint-description">Get comprehensive dashboard summary with analytics</p>
+                
+                <div class="response-example">
+                    <h5>Example Response (200 OK)</h5>
+                    <pre><code>{
+  "message": "Dashboard summary retrieved successfully",
+  "summary": {
+    "totalIncome": 25000.00,
+    "totalExpenses": 12000.00,
+    "netBalance": 13000.00,
+    "categoryBreakdown": [
+      {
+        "category": "Salary",
+        "type": "income",
+        "total": 20000.00,
+        "count": 5
+      },
+      {
+        "category": "Food",
+        "type": "expense",
+        "total": 3000.00,
+        "count": 8
+      }
+    ],
+    "recentActivity": [
+      {
+        "id": "uuid",
+        "amount": 1500.00,
+        "type": "income",
+        "category": "Salary",
+        "date": "2026-04-01",
+        "description": "Monthly salary",
+        "created_at": "2026-04-01T10:00:00Z"
+      }
+    ],
+    "monthlyTrends": [
+      {
+        "month": "2026-04",
+        "type": "income",
+        "total": 5000.00
+      },
+      {
+        "month": "2026-04",
+        "type": "expense",
+        "total": 2000.00
+      }
+    ]
+  }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="access-control" class="section">
+            <h2>🔒 Role-Based Access Control</h2>
+            <p>The system implements three role levels with different permissions:</p>
+
+            <table class="role-table">
+                <tr>
+                    <th>Action</th>
+                    <th>Viewer</th>
+                    <th>Analyst</th>
+                    <th>Admin</th>
+                </tr>
+                <tr>
+                    <td>View dashboard summary</td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                    <td>View own records</td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                    <td>View all records</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Create records</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Update records</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Delete records</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Manage users</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="check">✓</span></td>
+                </tr>
+                <tr>
+                    <td>View users list</td>
+                    <td><span class="cross">✗</span></td>
+                    <td><span class="check">✓</span></td>
+                    <td><span class="check">✓</span></td>
+                </tr>
+            </table>
+
+            <h4>Sample Credentials</h4>
+            <table class="param-table">
+                <tr>
+                    <th>Role</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                </tr>
+                <tr>
+                    <td>Admin</td>
+                    <td><code>admin@zorvyn.com</code></td>
+                    <td><code>admin123</code></td>
+                </tr>
+                <tr>
+                    <td>Analyst</td>
+                    <td><code>analyst@zorvyn.com</code></td>
+                    <td><code>analyst123</code></td>
+                </tr>
+                <tr>
+                    <td>Viewer</td>
+                    <td><code>viewer@zorvyn.com</code></td>
+                    <td><code>viewer123</code></td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="errors" class="section">
+            <h2>⚠️ Error Handling</h2>
+            <p>The API uses standard HTTP status codes and returns consistent error responses.</p>
+
+            <h4>HTTP Status Codes</h4>
+            <table class="param-table">
+                <tr>
+                    <th>Code</th>
+                    <th>Meaning</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><strong>200</strong></td>
+                    <td>Success</td>
+                    <td>Successful GET, PUT request</td>
+                </tr>
+                <tr>
+                    <td><strong>201</strong></td>
+                    <td>Created</td>
+                    <td>New resource created (POST)</td>
+                </tr>
+                <tr>
+                    <td><strong>400</strong></td>
+                    <td>Bad Request</td>
+                    <td>Validation error, invalid input</td>
+                </tr>
+                <tr>
+                    <td><strong>401</strong></td>
+                    <td>Unauthorized</td>
+                    <td>Missing or invalid token</td>
+                </tr>
+                <tr>
+                    <td><strong>403</strong></td>
+                    <td>Forbidden</td>
+                    <td>Insufficient permissions</td>
+                </tr>
+                <tr>
+                    <td><strong>404</strong></td>
+                    <td>Not Found</td>
+                    <td>Resource doesn't exist</td>
+                </tr>
+                <tr>
+                    <td><strong>409</strong></td>
+                    <td>Conflict</td>
+                    <td>Duplicate entry (e.g., email)</td>
+                </tr>
+                <tr>
+                    <td><strong>429</strong></td>
+                    <td>Too Many Requests</td>
+                    <td>Rate limit exceeded</td>
+                </tr>
+                <tr>
+                    <td><strong>500</strong></td>
+                    <td>Internal Server Error</td>
+                    <td>Unexpected server error</td>
+                </tr>
+            </table>
+
+            <h4>Error Response Format</h4>
+            <div class="response-example">
+                <pre><code>{
+  "error": "Validation failed",
+  "details": [
+    {
+      "type": "field",
+      "value": "invalid-email",
+      "msg": "Invalid value",
+      "path": "email",
+      "location": "body"
+    }
+  ]
+}</code></pre>
+            </div>
+
+            <h4>Rate Limiting</h4>
+            <p>The API implements rate limiting to prevent abuse:</p>
+            <table class="param-table">
+                <tr>
+                    <th>Endpoint Group</th>
+                    <th>Limit</th>
+                    <th>Window</th>
+                </tr>
+                <tr>
+                    <td>General API</td>
+                    <td>100 requests</td>
+                    <td>15 minutes</td>
+                </tr>
+                <tr>
+                    <td>Authentication</td>
+                    <td>20 requests</td>
+                    <td>15 minutes</td>
+                </tr>
+                <tr>
+                    <td>Record Mutations</td>
+                    <td>50 requests</td>
+                    <td>15 minutes</td>
+                </tr>
+            </table>
+        </section>
+
+        <footer>
+            <p><strong>Zorvyn Finance Backend</strong> - API Documentation</p>
+            <p>Built with Node.js, Express, and SQLite</p>
+            <p style="margin-top: 20px;">For more information, see <a href="https://github.com">README.md</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Copy base URL to clipboard
+        function copyBaseUrl() {
+            const baseUrl = document.getElementById('baseUrl').textContent;
+            navigator.clipboard.writeText(baseUrl).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
